@@ -10,6 +10,7 @@ from models.user import User
 from models.place import Place
 from models.base_model import Base
 from models.review import Review
+from models.amenity import Amenity
 
 
 class DBStorage:
@@ -21,7 +22,8 @@ class DBStorage:
         'City': City,
         'User': User,
         'Place': Place,
-        'Review': Review
+        'Review': Review,
+        'Amenity': Amenity
     }
 
     def __init__(self):
