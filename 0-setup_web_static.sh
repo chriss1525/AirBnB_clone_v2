@@ -51,15 +51,10 @@ give_ownership() {
 
 # update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 update_nginx_config() {
-  config_file="/etc/nginx/sites-available/default"
-  alias_line="alias /hbnb_static \"/data/web_static/current/\";"
-  if grep -qF "$alias_line" "$config_file"; then
-    echo "alias already exists"
-  else
-    sudo sed -i "/server_name _;/a \ \ \ \ $alias_line" "$config_file"
-    sudo service nginx restart 
-  fi
+  # Use BEGIN and END comments to locate the section for insertion
+  sudo sed -i '/# server/c\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
 }
+
 # restart nginx
 restart_nginx() {
   sudo service nginx restart
