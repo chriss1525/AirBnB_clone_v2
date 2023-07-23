@@ -3,7 +3,7 @@
 # install nginx if not already installed
 
 install_nginx() {
-  if ! which nginx > /dev/null 2>&1; then
+  if ! command -v nginx &>/dev/null; then
     sudo apt-get -y update
     sudo apt-get install -y nginx
   fi
