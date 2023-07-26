@@ -48,11 +48,31 @@ create_symbolic_link() {
 give_ownership() {
   sudo chown -R ubuntu:ubuntu /data/
 }
+config="
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    add_header X-Served-By 166231-web-01;
+    root   /var/www/html;
+    index  index.html index.htm;
+    location /redirect_me {
+        return 301 http://cuberule.com/;
+    }
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+    location /hbnb_static {
+        alias /data/web_static/current/;
+        index index.html index.htm;
+      }
+}"
 
 # update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 update_nginx_config() {
   # Use BEGIN and END comments to locate the section for insertion
-  sudo sed -i '/# server/c\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
+ echo $config | sudo tee /etc/nginx/sites-available/default
 }
 
 # restart nginx
